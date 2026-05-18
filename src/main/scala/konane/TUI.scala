@@ -8,14 +8,14 @@ object TUI:
 
   private val SAVE_FILE = "konane_save.txt"
 
-  // Ponto de entrada da TUI — mostra cabeçalho e abre o menu principal
+  // Ponto de entrada da TUI — mostra cabecalho e abre o menu principal
   def start(): Unit =
     println("~" * 30)
-    println("     KONANE - Versão TUI")
+    println("     KONANE - Versao TUI")
     println("~" * 30)
     mainMenu()
 
-  // Menu principal com opções de novo jogo, carregar e sair
+  // Menu principal com opcões de novo jogo, carregar e sair
   @tailrec
   private def mainMenu(): Unit =
     println("\n--- Menu Principal ---")
@@ -54,7 +54,7 @@ object TUI:
       s"Dificuldade: ${difficultyName(difficulty)}")
     state
 
-  // Lê e valida as dimensões do tabuleiro — devem ser pares entre 4 e 12
+  // Le e valida as dimensões do tabuleiro — devem ser pares entre 4 e 12
   private def readBoardDimensions(): (Int, Int) =
     print("Dimensoes do tabuleiro (linhas colunas, ex: 6 6): ")
     val input = StdIn.readLine().trim.split("\\s+")
@@ -74,7 +74,7 @@ object TUI:
       println("Formato: <linhas> <colunas> (ex: 6 6)")
       readBoardDimensions()
 
-  // Lê o tempo máximo por jogada em segundos (0 significa sem limite)
+  // Le o tempo maximo por jogada em segundos (0 significa sem limite)
   private def readMaxTime(): Long =
     print("Tempo maximo por jogada em segundos (0 = sem limite): ")
     try
@@ -85,7 +85,7 @@ object TUI:
         println("Entrada invalida.")
         readMaxTime()
 
-  // Lê o nível de dificuldade: 1=Fácil, 2=Médio, 3=Difícil
+  // Le o nível de dificuldade: 1=Facil, 2=Medio, 3=Difícil
   private def readDifficulty(): Int =
     print("Nivel de dificuldade (1=Facil, 2=Medio, 3=Dificil): ")
     try
@@ -108,7 +108,7 @@ object TUI:
   // Converte letra de coluna para índice ('A' -> 0, 'B' -> 1, ...)
   private def letterToCol(ch: Char): Int = ch.toUpper - 'A'
 
-  // Formata uma coordenada para apresentação ao utilizador (ex: (2,0) -> "2A")
+  // Formata uma coordenada para apresentacao ao utilizador (ex: (2,0) -> "2A")
   private def formatCoord(c: Coord2D): String = s"${c._1}${colToLetter(c._2)}"
 
   // Interpreta texto introduzido pelo utilizador como coordenada
@@ -132,7 +132,7 @@ object TUI:
           val c = letterToCol(col.head)
           if r >= 0 && r < maxRow && c >= 0 && c < maxCol then Some((r, c)) else None
         case _ =>
-          // Tenta dois números separados por espaço ou vírgula (ex: "2 0")
+          // Tenta dois números separados por espaco ou vírgula (ex: "2 0")
           val parts = input.trim.split("[,\\s]+")
           if parts.length == 2 then
             try
@@ -150,7 +150,7 @@ object TUI:
     println()
     println(Game.boardToString(state.board, state.rows, state.cols))
 
-    // T5: verifica se há vencedor antes de continuar
+    // T5: verifica se ha vencedor antes de continuar
     Game.checkWinner(state.board, state.currentPlayer, state.rows, state.cols) match
       case Some(winner) =>
         println(s"\n*** ${winner.display} GANHOU! ${state.currentPlayer.display} nao tem jogadas validas. ***")
@@ -241,7 +241,7 @@ object TUI:
               // O computador escolhe e executa a melhor jogada em nome do humano
               playAuto(state)
             case _ =>
-              // Tenta interpretar a entrada diretamente como coordenada de peça (ex: "2A")
+              // Tenta interpretar a entrada diretamente como coordenada de peca (ex: "2A")
               parseCoord(input, state.rows, state.cols) match
                 case Some(coord) if movablePieces.contains(coord) =>
                   executeChainCapture(state, coord, startTime)
@@ -250,7 +250,7 @@ object TUI:
                   Some(state)
 
   // [A]uto — usa Game.computerPlay para jogar automaticamente pelo humano (Preto)
-  // Guarda o estado no histórico para permitir undo após a jogada automática
+  // Guarda o estado no histórico para permitir undo após a jogada automatica
   private def playAuto(state: GameState): Option[GameState] =
     val (resultOpt, newRand, newOpen, moveOpt) =
       Game.computerPlay(
@@ -263,7 +263,7 @@ object TUI:
         moveOpt.foreach { case (from, to) =>
           println(s"Joguei por ti: ${formatCoord(from)} -> ${formatCoord(to)}")
         }
-        // Guarda estado anterior no histórico antes de aplicar a jogada automática
+        // Guarda estado anterior no histórico antes de aplicar a jogada automatica
         Some(GameState.pushHistory(state).copy(
           board = newBoard,
           currentPlayer = state.currentPlayer.opponent,
@@ -274,7 +274,7 @@ object TUI:
         println("Sem jogadas possiveis.")
         Some(state)
 
-  // Pede ao utilizador que selecione uma peça e inicia a cadeia de capturas
+  // Pede ao utilizador que selecione uma peca e inicia a cadeia de capturas
   private def executePlayerTurn(state: GameState, movablePieces: List[Coord2D], startTime: Long): Option[GameState] =
     print(s"Selecione a peca (ex: ${formatCoord(movablePieces.head)}): ")
     val pieceInput = StdIn.readLine()
@@ -289,12 +289,12 @@ object TUI:
           println(s"Peca invalida. Escolha entre: ${movablePieces.map(formatCoord).mkString(", ")}")
           Some(state)
 
-  // Executa capturas em cadeia a partir de uma posição inicial
+  // Executa capturas em cadeia a partir de uma posicao inicial
   // Permite ao jogador continuar a capturar ou parar voluntariamente com [P]
   private def executeChainCapture(state: GameState, from: Coord2D, startTime: Long): Option[GameState] =
     val stateWithHistory = GameState.pushHistory(state)
 
-    // Termina o turno e passa a vez ao adversário
+    // Termina o turno e passa a vez ao adversario
     def finishTurn(board: Board, openCoords: List[Coord2D], rand: MyRandom, captures: Int): Option[GameState] =
       println(s"Turno completo. Capturas: $captures")
       Some(stateWithHistory.copy(
@@ -317,7 +317,7 @@ object TUI:
         else Some(state.copy(currentPlayer = state.currentPlayer.opponent))
       else
         if captures > 0 then
-          // Já fez pelo menos uma captura — mostra tabuleiro atual e pergunta se quer continuar
+          // Ja fez pelo menos uma captura — mostra tabuleiro atual e pergunta se quer continuar
           println()
           println(Game.boardToString(board, state.rows, state.cols))
           println(s"\nPosicao atual: ${formatCoord(pos)}")
@@ -331,7 +331,7 @@ object TUI:
           println(s"Destinos possiveis: ${jumps.map(formatCoord).mkString(", ")}")
           readJump(board, pos, open, rand, captures, jumps)
 
-    // Lê e valida o destino escolhido pelo jogador para o próximo salto
+    // Le e valida o destino escolhido pelo jogador para o próximo salto
     def readJump(board: Board, pos: Coord2D, open: List[Coord2D],
                  rand: MyRandom, captures: Int, jumps: List[Coord2D]): Option[GameState] =
       print(s"Destino (ex: ${formatCoord(jumps.head)}): ")

@@ -11,13 +11,13 @@ object Main:
     println()
     askInterface()
 
-  // continua a perguntar até o utilizador escolher 1, 2 ou -1
+  // continua a perguntar ate o utilizador escolher 1, 2 ou -1
   // @tailrec garante que chamadas recursivas não acumulam stack frames
   @tailrec
   private def askInterface(): Unit =
     println("Qual interface deseja jogar?")
     println("1. TUI (textual)")
-    println("2. GUI (gráfica)")
+    println("2. GUI (grafica)")
     println("-1. Sair")
     print("> ")
 

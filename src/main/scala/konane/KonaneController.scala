@@ -380,7 +380,7 @@ class KonaneController extends Initializable:
       updateBoard()
 
       statusLabel.setText(
-        "Peça selecionada."
+        "Peca selecionada."
       )
 
     else if ui.destinations
@@ -438,7 +438,7 @@ class KonaneController extends Initializable:
           case None =>
 
             statusLabel.setText(
-              "Jogada inválida."
+              "Jogada invalida."
             )
 
       case None => ()
@@ -452,7 +452,7 @@ class KonaneController extends Initializable:
       "Computador a jogar..."
     )
 
-    // Verifica primeiro se o computador tem jogadas; se não tiver, o jogador humano ganhou
+    // Verifica primeiro se o computador tem jogadas; se nao tiver, o jogador humano ganhou
     if Game.hasLost(gameState.board, Stone.White, ROWS, COLS) then
       statusLabel.setText("Computador sem jogadas. Preto ganhou!")
     else
@@ -510,7 +510,7 @@ class KonaneController extends Initializable:
   // "Jogar por mim" usa computerPlay no modo Preto para sugerir e executar a melhor jogada
   private def playForHuman(): Unit =
     if gameState.currentPlayer != Stone.Black then
-      statusLabel.setText("Não é a tua vez...")
+      statusLabel.setText("Nao e a tua vez...")
     else if Game.hasLost(gameState.board, Stone.Black, ROWS, COLS) then
       statusLabel.setText("Sem jogadas disponíveis.")
     else
@@ -616,11 +616,11 @@ class KonaneController extends Initializable:
     )
 
   //atualizacao visual do tabuleiro
-  // Destaca a verde-claro as peças que têm jogadas disponíveis no início do turno do humano
+  // Destaca a verde-claro as pecas que tem jogadas disponíveis no início do turno do humano
 
   private def updateBoard(): Unit =
 
-    // Calcula as peças movíveis apenas quando é a vez do humano e não está em cadeia
+    // Calcula as pecas movíveis apenas quando e a vez do humano e nao esta em cadeia
     val movablePieces =
       if gameState.currentPlayer == Stone.Black && !ui.isChaining then
         Game.getMovablePieces(gameState.board, Stone.Black, ROWS, COLS)
@@ -639,13 +639,13 @@ class KonaneController extends Initializable:
 
         val bgColor =
           if ui.selected.contains(coord) || ui.chainPos.contains(coord) then
-            "#f6c177" // laranja — peça selecionada ou posição atual na cadeia
+            "#f6c177" // laranja — peca selecionada ou posicao atual na cadeia
           else if ui.destinations.contains(coord) then
             "#90EE90" // verde escuro — destinos possíveis
           else if movablePieces.contains(coord) then
-            "#c8f0c8" // verde claro — peça tem jogadas disponíveis
+            "#c8f0c8" // verde claro — peca tem jogadas disponíveis
           else
-            "#e7ddd2" // cor normal da célula
+            "#e7ddd2" // cor normal da celula
 
         cell.setStyle(
           s"-fx-background-color: $bgColor;" +
