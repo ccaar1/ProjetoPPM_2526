@@ -15,7 +15,7 @@ import scalafx.util.Duration
 import scalafx.beans.property.StringProperty
 import scalafx.collections.ObservableBuffer
 
-// T8: GUI fixado a 6x6
+// T8 GUI fixo a 6x6
 object KonaneGUI extends JFXApp3:
 
   private val ROWS = 6
@@ -23,7 +23,7 @@ object KonaneGUI extends JFXApp3:
   private val CELL_SIZE = 80.0
   private val SAVE_FILE = "konane_save.txt"
 
-  // Functional OOP: UI state consolidated in immutable case class
+  // oop
   case class UIState(
     selected: Option[Coord2D] = None,
     destinations: List[Coord2D] = Nil,
@@ -35,11 +35,11 @@ object KonaneGUI extends JFXApp3:
     def isChaining: Boolean = chainPos.isDefined
     def reset(time: Long): UIState = UIState(turnStart = time)
 
-  // Mutable state (allowed in GUI per project spec)
+  // estados mutaveis
   private var gameState: GameState = _
   private var ui: UIState = UIState()
 
-  // UI properties
+  // propridades da interface
   private val statusText = StringProperty("Bem-vindo ao Konane!")
   private val playerText = StringProperty("Jogador: Black")
   private val timerText = StringProperty("")
@@ -75,11 +75,11 @@ object KonaneGUI extends JFXApp3:
 
   private def createHeader(): HBox =
     val titleLabel = new Label("KONANE"):
-      font = Font.font("Arial", FontWeight.Bold, 24)
+      font = Font.font("Calibri", FontWeight.Bold, 24)
       textFill = Color.Black
     val statusLabel = new Label():
       text <== statusText
-      font = Font.font("Arial", 14)
+      font = Font.font("Calibri", 14)
       style = "-fx-font-weight: bold;"
       textFill = Color.Black
     val spacer = new Region()
@@ -100,7 +100,7 @@ object KonaneGUI extends JFXApp3:
 
     for c <- 0 until COLS do
       val label = new Label(('A' + c).toChar.toString):
-        font = Font.font("Arial", FontWeight.Bold, 14)
+        font = Font.font("Calibri", FontWeight.Bold, 14)
         textFill = Color.White
         prefWidth = CELL_SIZE
         alignment = Pos.Center
@@ -108,7 +108,7 @@ object KonaneGUI extends JFXApp3:
 
     for r <- 0 until ROWS do
       val rowLabel = new Label(r.toString):
-        font = Font.font("Arial", FontWeight.Bold, 14)
+        font = Font.font("Calibri", FontWeight.Bold, 14)
         textFill = Color.White
         prefWidth = 20
         alignment = Pos.Center
@@ -131,19 +131,19 @@ object KonaneGUI extends JFXApp3:
   private def createSidebar(): VBox =
     val playerLabel = new Label():
       text <== playerText
-      font = Font.font("Arial", FontWeight.Bold, 16)
+      font = Font.font("Calibri", FontWeight.Bold, 16)
       style = "-fx-font-weight: bold;"
       textFill = Color.Black
 
 
     val timerLabel = new Label():
       text <== timerText
-      font = Font.font("Arial", 14)
+      font = Font.font("Calibri", 14)
       textFill = Color.web("#e74c3c")
 
     val timeLabel = new Label("Tempo por jogada:"):
       style = "-fx-font-weight: bold;"
-      font = Font.font("Arial", 12)
+      font = Font.font("Calibri", 12)
       textFill = Color.Black
 
     val timeCombo = new ComboBox[String](ObservableBuffer("Sem limite", "15s", "30s", "60s", "120s")):
@@ -163,7 +163,7 @@ object KonaneGUI extends JFXApp3:
 
     val diffLabel = new Label("Dificuldade:"):
       style = "-fx-font-weight: bold;"
-      font = Font.font("Arial", 12)
+      font = Font.font("Calibri", 12)
       textFill = Color.Black
 
     val diffCombo = new ComboBox[String](ObservableBuffer("Facil", "Medio", "Dificil")):
@@ -180,7 +180,7 @@ object KonaneGUI extends JFXApp3:
       style = "-fx-background-color: #f4bcb0; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;-fx-border-radius: 12;-fx-cursor: hand;"
       onAction = _ => newGame()
 
-    val undoBtn = new Button("Desfazer"):
+    val undoBtn = new Button("Voltar atrás"):
       prefWidth = 120
       style = "-fx-background-color: #e1abb5; -fx-text-fill: white; -fx-font-weight: bold;-fx-background-radius: 12;-fx-border-radius: 12;-fx-cursor: hand;"
       onAction = _ => performUndo()
@@ -190,7 +190,7 @@ object KonaneGUI extends JFXApp3:
       style = "-fx-background-color: #c58f8f; -fx-text-fill: white; -fx-font-weight: bold;-fx-background-radius: 12;-fx-border-radius: 12;-fx-cursor: hand;"
       onAction = _ =>
         if GameState.save(gameState, SAVE_FILE) then
-          statusText.value = "Jogo guardado!"
+          statusText.value = "Jogo guardado."
         else
           statusText.value = "Erro ao guardar."
 
@@ -203,11 +203,11 @@ object KonaneGUI extends JFXApp3:
             gameState = state
             ui = UIState(turnStart = System.currentTimeMillis())
             updateBoard()
-            statusText.value = "Jogo carregado!"
+            statusText.value = "Jogo carregado."
           case None =>
             statusText.value = "Nenhum jogo guardado."
 
-    //Parar captura: Caso tenhamos a oportunidade de puder fazer varias jogadas de capturas, o botao para as possibilidades de captura e passa para o proximo
+    //T7 Parar captura: Caso tenhamos a oportunidade de puder fazer varias jogadas de capturas, o botao para as possibilidades de captura e passa para o proximo
     val stopCaptureBtn = new Button("Parar Captura"):
       prefWidth = 120
       style = "-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold;-fx-background-radius: 12;-fx-border-radius: 12;-fx-cursor: hand;"
@@ -248,7 +248,7 @@ object KonaneGUI extends JFXApp3:
           gameState = prev
           ui = ui.reset(System.currentTimeMillis())
           updateBoard()
-          statusText.value = "Undo realizado!"
+          statusText.value = "Undo realizado."
         case None =>
           statusText.value = "Nada para desfazer."
 
@@ -330,7 +330,7 @@ object KonaneGUI extends JFXApp3:
     gameState = gameState.copy(currentPlayer = Stone.White, history = saveState.history)
     ui = ui.reset(ui.turnStart)
     updateBoard()
-    statusText.value = "Turno do computador..."
+    statusText.value = "A vez do computador..."
 
     val delay = new Timeline:
       keyFrames = Seq(

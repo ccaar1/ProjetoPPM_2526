@@ -1,7 +1,7 @@
 package konane
 
 import scala.collection.parallel.immutable.ParMap
-import scala.annotation.tailrec
+import scala.annotation.tailrec //importar @tailrec, recursao em vez de loops
 
 object Game:
 
@@ -53,7 +53,7 @@ object Game:
     val board = initBoard(rows, cols)
     removeInitialStones(board, rows, cols, rand)
 
-  // T1: coordenada random a partir da lista de posicoes livres
+  // T1 coordenada random a partir da lista de posicoes livres
   def randomMove(lstOpenCoords: List[Coord2D], rand: MyRandom): (Coord2D, MyRandom) =
     lstOpenCoords match
       case Nil => ((0, 0), rand)
@@ -62,7 +62,7 @@ object Game:
         val (idx, newRand) = rand.nextInt(lstOpenCoords.size)
         (lstOpenCoords(idx), newRand)
 
-  // T2: valida acao 
+  // T2 valida acao 
   def isValidCapture(board: Board, player: Stone, from: Coord2D, to: Coord2D, rows: Int, cols: Int): Boolean =
     val (fr, fc) = from
     val (tr, tc) = to
@@ -77,7 +77,7 @@ object Game:
         !board.contains(to) &&
         board.get(mid).contains(player.opponent)
 
-  // T2: executa uma acao unica
+  // T2 executa uma acao unica
   def executeCapture(board: Board, from: Coord2D, to: Coord2D, lstOpenCoords: List[Coord2D]): (Board, List[Coord2D]) =
     val (fr, fc) = from
     val (tr, tc) = to
@@ -87,13 +87,13 @@ object Game:
     val newOpen = from :: mid :: lstOpenCoords.filterNot(_ == to)
     (newBoard, newOpen)
 
-  // T2: executa todas as caps ao longo da path
+  // T2 executa todas as caps ao longo da path
   def executePath(board: Board, player: Stone, path: List[Coord2D], lstOpenCoords: List[Coord2D]): (Board, List[Coord2D]) =
     path.zip(path.drop(1)).foldLeft((board, lstOpenCoords)) { case ((b, open), (from, to)) =>
       executeCapture(b, from, to, open)
     }
 
-  // T2: encontra path valida 
+  // T2 encontra path valida 
   def findCapturePath(board: Board, player: Stone, from: Coord2D, to: Coord2D, rows: Int, cols: Int): Option[List[Coord2D]] =
     if from == to then None
     else
@@ -116,7 +116,7 @@ object Game:
                 bfs(rest ++ jumps, visited ++ jumps.map(_._1))
       bfs(List((from, board, List(from))), Set(from))
 
-  // T2: play - move peca se valida, devolve novo board e coordenadas
+  // T2 play - move peca se valida, devolve novo board e coordenadas
   def play(board: Board, player: Stone, coordFrom: Coord2D, coordTo: Coord2D, lstOpenCoords: List[Coord2D]): (Option[Board], List[Coord2D]) =
     val allCoords = board.seq.keySet ++ lstOpenCoords.toSet
     val (rows, cols) = if allCoords.isEmpty then (0, 0)
@@ -128,7 +128,7 @@ object Game:
       case None =>
         (None, lstOpenCoords)
 
-  // T2: saltinhos de forma a encontrar espacos perto
+  // T2 saltinhos de forma a encontrar espacos perto
   def getAllChainDestinations(board: Board, player: Stone, from: Coord2D, visited: Set[Coord2D], rows: Int, cols: Int): List[Coord2D] =
     @tailrec
     def explore(queue: List[(Coord2D, Board, Set[Coord2D])], acc: List[Coord2D]): List[Coord2D] =
@@ -146,14 +146,14 @@ object Game:
           explore(rest ++ jumps, acc ++ jumps.map(_._1))
     explore(List((from, board, visited)), Nil)
 
-  // T3: saltos validos para o jogador
+  // T3 saltos validos para o jogador
   def getValidMoves(board: Board, player: Stone, rows: Int, cols: Int): List[(Coord2D, List[Coord2D])] =
     board.seq.toList
       .collect { case (coord, stone) if stone == player => coord }
       .map(from => (from, getAllChainDestinations(board, player, from, Set(from), rows, cols)))
       .filter(_._2.nonEmpty)
 
-  // T3: play randomly usando funcao f para escolher coords
+  // T3 play randomly usando funcao f para escolher coords
   def playRandomly(
     board: Board,
     r: MyRandom,
@@ -180,11 +180,11 @@ object Game:
               case Some(newBoard) => (Some(newBoard), r3, newOpen, Some(chosenTo))
               case None => (None, r3, lstOpenCoords, None)
 
-  // T4: currying - cria funcao de validacao especializada para um board/player
+  // T4 currying - cria funcao de validacao especializada para um board/player
   def captureValidatorFor(board: Board, player: Stone, rows: Int, cols: Int)(from: Coord2D, to: Coord2D): Boolean =
     isValidCapture(board, player, from, to, rows, cols)
 
-  // T4: representacao do board para string (usa foldRight)
+  // T4 representacao do board para string (usa foldRight)
   def boardToString(board: Board, rows: Int, cols: Int): String =
     val colHeaders = (0 until cols).toList.map(c => ('A' + c).toChar).mkString("  ", " ", "")
     val rowStrings = (0 until rows).toList.foldRight(List.empty[String]) { (r, acc) =>
@@ -198,16 +198,16 @@ object Game:
     }
     (colHeaders :: rowStrings).mkString("\n")
 
-  // T5: verifica se o jogador perdeu (sem jogadas validas)
+  // T5 verifica se o jogador perdeu (sem jogadas validas)
   def hasLost(board: Board, player: Stone, rows: Int, cols: Int): Boolean =
     getValidMoves(board, player, rows, cols).isEmpty
 
-  // T5: devolve o vencedor se o jogo terminou
+  // T5 devolve o vencedor se o jogo terminou
   def checkWinner(board: Board, currentPlayer: Stone, rows: Int, cols: Int): Option[Stone] =
     if hasLost(board, currentPlayer, rows, cols) then Some(currentPlayer.opponent)
     else None
 
-  // PAF: usa captureValidatorFor para criar validador especializado
+  // PAF usa captureValidatorFor para criar validador especializado
   def getSingleJumps(board: Board, player: Stone, from: Coord2D, rows: Int, cols: Int): List[Coord2D] =
     val isValid = captureValidatorFor(board, player, rows, cols)
     directions.flatMap { case (dr, dc) =>
@@ -216,14 +216,14 @@ object Game:
       else None
     }
 
-  // Helper: pieces that can make at least one capture
+  // helper pecas que fazem no minimo 1 captura
   def getMovablePieces(board: Board, player: Stone, rows: Int, cols: Int): List[Coord2D] =
     board.seq.toList
       .collect { case (coord, stone) if stone == player => coord }
       .filter(from => getSingleJumps(board, player, from, rows, cols).nonEmpty)
       .sorted
 
-  // AI: evaluation function for minimax
+  // funcao para minmax
   private def evaluate(board: Board, maximizingPlayer: Stone, rows: Int, cols: Int): Int =
     val myPieces = board.seq.count(_._2 == maximizingPlayer)
     val oppPieces = board.seq.count(_._2 == maximizingPlayer.opponent)
@@ -231,7 +231,7 @@ object Game:
     val oppMoves = getValidMoves(board, maximizingPlayer.opponent, rows, cols).size
     (myPieces - oppPieces) * 10 + (myMoves - oppMoves) * 5
 
-  // AI: minimax with alpha-beta pruning
+  // minmax
   private def minimaxAB(board: Board, currentPlayer: Stone, maximizingPlayer: Stone,
     depth: Int, rows: Int, cols: Int, lstOpenCoords: List[Coord2D],
     alpha: Int, beta: Int): Int =
@@ -268,20 +268,20 @@ object Game:
               Math.min(currentBeta, score)
           }
 
-  // AI: computer plays with difficulty levels
+  // computador joga consoante dificuldade
   def computerPlay(board: Board, player: Stone, rows: Int, cols: Int, lstOpenCoords: List[Coord2D],
     rand: MyRandom, difficulty: Int): (Option[Board], MyRandom, List[Coord2D], Option[(Coord2D, Coord2D)]) =
     val validMoves = getValidMoves(board, player, rows, cols)
     if validMoves.isEmpty then (None, rand, lstOpenCoords, None)
     else difficulty match
-      case 1 => // Easy - random
+      case 1 => // Facil
         val origins = validMoves.map(_._1)
         val (chosenFrom, r2) = randomMove(origins, rand)
         val dests = validMoves.find(_._1 == chosenFrom).map(_._2).getOrElse(Nil)
         val (chosenTo, r3) = randomMove(dests, r2)
         val (result, newOpen) = play(board, player, chosenFrom, chosenTo, lstOpenCoords)
         (result, r3, if result.isDefined then newOpen else lstOpenCoords, result.map(_ => (chosenFrom, chosenTo)))
-      case 2 => // Medium - greedy (prefer longest chain captures)
+      case 2 => // Medio, greedy
         val allMoves = validMoves.flatMap { case (from, tos) =>
           tos.map { to =>
             val pathLen = findCapturePath(board, player, from, to, rows, cols).map(_.size - 1).getOrElse(0)
@@ -294,7 +294,7 @@ object Game:
         val (from, to, _) = bestMoves(idx)
         val (result, newOpen) = play(board, player, from, to, lstOpenCoords)
         (result, r2, if result.isDefined then newOpen else lstOpenCoords, result.map(_ => (from, to)))
-      case _ => // Hard - minimax with alpha-beta
+      case _ => // dificil
         val allMoves = validMoves.flatMap { case (from, tos) => tos.map(to => (from, to)) }
         val scored = allMoves.map { case (from, to) =>
           val (resultOpt, newOpen) = play(board, player, from, to, lstOpenCoords)

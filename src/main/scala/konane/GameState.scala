@@ -4,7 +4,7 @@ import scala.collection.parallel.immutable.ParMap
 import java.io.{PrintWriter, File}
 import scala.io.Source
 
-// T6: Game state with undo history support
+// T6 historia do undo
 case class GameState(
   board: Board,
   currentPlayer: Stone,
@@ -13,8 +13,8 @@ case class GameState(
   cols: Int,
   rand: MyRandom,
   history: List[(Board, Stone, List[Coord2D], MyRandom)], // undo stack
-  maxMoveTime: Long, // seconds, 0 = no limit
-  difficulty: Int // 1=Easy, 2=Medium, 3=Hard
+  maxMoveTime: Long, // em segundos
+  difficulty: Int // 1.Facil, 2. Medio, 3 Dificil
 )
 
 object GameState:
@@ -24,12 +24,12 @@ object GameState:
     val (board, open, r2) = Game.createGame(rows, cols, rand)
     GameState(board, Stone.Black, open, rows, cols, r2, Nil, maxMoveTime, difficulty)
 
-  // T6: push current state to history (before a full turn: player + computer)
+  // T6 estado atual para o historico
   def pushHistory(state: GameState): GameState =
     val entry = (state.board, state.currentPlayer, state.lstOpenCoords, state.rand)
     state.copy(history = entry :: state.history)
 
-  // T6: undo - pop last state from history
+  // T6 undo, faz pop do ultimo adicionado
   def undo(state: GameState): Option[GameState] =
     state.history match
       case (prevBoard, prevPlayer, prevOpen, prevRand) :: rest =>
@@ -42,7 +42,7 @@ object GameState:
         ))
       case Nil => None
 
-  // Save game to file (exception to pure FP for persistence requirement)
+  // guardar ficheiro
   def save(state: GameState, filename: String): Boolean =
     try
       val pw = new PrintWriter(new File(filename))
@@ -74,7 +74,7 @@ object GameState:
     catch
       case _: Exception => false
 
-  // Load game from file
+  // carrega jogo de um ficheiro preexistente
   def load(filename: String): Option[GameState] =
     try
       val file = new File(filename)
