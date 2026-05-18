@@ -4,18 +4,9 @@ Projeto Konane - Programacao Multiparadigma 2025/2026
 Jogo de tabuleiro Konane (Hawaiian Checkers) implementado em Scala 3
 com interfaces TUI e GUI (JavaFX/ScalaFX).
 
-Requisitos:
-  - JDK 17+ (recomendado JDK 21)
-  - sbt 1.10.x
-
 Como executar:
   1. Na raiz do projeto: sbt run
   2. Escolher 1 para TUI ou 2 para GUI
-
-Importar no IntelliJ:
-  1. File > Open > selecionar pasta do projeto
-  2. Importar como projeto sbt
-  3. Aguardar resolucao de dependencias
 
 Estrutura:
   src/main/scala/konane/
