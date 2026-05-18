@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="konane.KonaneController"
+        prefWidth="760"
+        prefHeight="620"
+        style="-fx-background-color: #fde4c6;">
+
+    <top>
+
+        <HBox
+                spacing="10"
+                alignment="CENTER_LEFT"
+                style="-fx-padding: 10;">
+
+            <Label
+                    fx:id="titleLabel"
+                    text="KONANE"
+                    style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Label
+                    fx:id="statusLabel"
+                    style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
+        </HBox>
+
+    </top>
+
+    <center>
+
+        <GridPane
+                fx:id="boardGrid"
+                hgap="2"
+                vgap="2"
+                style="-fx-background-color: #c5aa8f;
+                       -fx-padding: 5;
+                       -fx-background-radius: 5;" />
+
+    </center>
+
+    <right>
+
+        <VBox
+                spacing="10"
+                alignment="TOP_CENTER"
+                prefWidth="200"
+                style="-fx-padding: 10;
+                       -fx-background-color: #fbd2b9;
+                       -fx-background-radius: 5;">
+
+            <Label
+                    fx:id="playerLabel"
+                    style="-fx-font-size: 16px;
+                           -fx-font-weight: bold;" />
+
+            <Label
+                    fx:id="timerLabel"
+                    style="-fx-font-size: 14px;
+                           -fx-text-fill: #e74c3c;" />
+
+            <Separator />
+
+            <Label
+                    text="Tempo por jogada:"
+                    style="-fx-font-weight: bold;" />
+
+            <ComboBox
+                    fx:id="timeCombo"
+                    prefWidth="120"
+                    style=" -fx-text-fill: black;
+                            -fx-font-weight: bold;
+                            -fx-background-radius: 12;"/>
+
+            <Label
+                    text="Dificuldade:"
+                    style="-fx-font-weight: bold;" />
+
+            <ComboBox
+                    fx:id="diffCombo"
+                    prefWidth="120"
+                    style="-fx-text-fill: black;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;"/>
+
+            <Separator />
+
+            <Button
+                    fx:id="newGameBtn"
+                    text="Novo Jogo"
+                    prefWidth="120"
+                    style="-fx-background-color: #f4bcb0;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;" />
+
+            <Button
+                    fx:id="undoBtn"
+                    text="Voltar atrás"
+                    prefWidth="120"
+                    style="-fx-background-color: #e1abb5;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;" />
+
+            <Button
+                    fx:id="saveBtn"
+                    text="Guardar"
+                    prefWidth="120"
+                    style="-fx-background-color: #c58f8f;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;" />
+
+            <Button
+                    fx:id="loadBtn"
+                    text="Carregar"
+                    prefWidth="120"
+                    style="-fx-background-color: #9d7272;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;" />
+
+            <Separator />
+
+            <Button
+                    fx:id="stopCaptureBtn"
+                    text="Parar Captura"
+                    prefWidth="120"
+                    style="-fx-background-color: #c0392b;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;" />
+
+            <Separator />
+
+            <Button
+                    fx:id="hintBtn"
+                    text="Jogar por mim"
+                    prefWidth="120"
+                    style="-fx-background-color: #f6ac72;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 12;" />
+
+        </VBox>
+
+    </right>
+
+</BorderPane>

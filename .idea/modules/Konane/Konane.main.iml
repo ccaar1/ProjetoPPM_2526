@@ -7,6 +7,7 @@
     <output url="file://$MODULE_DIR$/../../../target/scala-3.3.4/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../src/main/scala" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../../target/scala-3.3.4/resource_managed/main" />

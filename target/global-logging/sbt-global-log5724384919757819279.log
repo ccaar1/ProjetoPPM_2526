@@ -1,0 +1,12 @@
+[debug] > Exec(dd, None, None)
+[error] Not a valid command: dd
+[error] Not a valid project ID: dd
+[error] Expected ':'
+[error] Not a valid key: dd
+[error] dd
+[error]   ^
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)
